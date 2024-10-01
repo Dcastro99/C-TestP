@@ -50,7 +50,7 @@ namespace WebApplication1.Controllers
             return Ok(pokemon);
         }
 
-
+        //------------------- GET POKEMON RATING BY ID -----------------//
 
         [HttpGet("{pokeId}/rating")]
         [ProducesResponseType(200, Type = typeof(decimal))]

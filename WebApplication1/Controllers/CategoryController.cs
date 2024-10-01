@@ -34,6 +34,8 @@ namespace WebApplication1.Controllers
             return Ok(categories);
         }
 
+        //---------GET CATEGORY BY ID----------//
+
         [HttpGet("{categoryId}")]
         [ProducesResponseType(200, Type = typeof(Category))]
         [ProducesResponseType(400)]
@@ -50,6 +52,8 @@ namespace WebApplication1.Controllers
 
             return Ok(category);
         }
+
+        //---------GET POKEMON BY CATEGORY----------//
 
         [HttpGet("pokemon/{categoryId}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemon>))]

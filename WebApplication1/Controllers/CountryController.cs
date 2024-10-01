@@ -20,6 +20,8 @@ namespace WebApplication1.Controllers
             _mapper = mapper;
         }
 
+        //---------GET ALL COUNTRIES----------//
+
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Country>))]
 
@@ -34,6 +36,8 @@ namespace WebApplication1.Controllers
 
             return Ok(countries);
         }
+
+        //----------------GET COUNTRY BY ID----------------//
 
         [HttpGet("{countryId}")]
         [ProducesResponseType(200, Type = typeof(Country))]
@@ -55,6 +59,8 @@ namespace WebApplication1.Controllers
             return Ok(country);
 
         }
+
+        //----------------GET COUNTRY BY OWNER----------------//
 
         [HttpGet("owner/{ownerId}")]
         [ProducesResponseType(200, Type = typeof(Country))]
