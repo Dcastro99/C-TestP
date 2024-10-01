@@ -33,7 +33,7 @@ namespace WebApplication1.Repository
 
         public bool ReviewerExists(int reviewerId)
         {
-            throw new NotImplementedException();
+           return _context.Reviewers.Any(r => r.Id == reviewerId);
         }
     }
 }

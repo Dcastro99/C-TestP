@@ -19,6 +19,8 @@ namespace WebApplication1.Controllers
            _mapper = mapper;
         }
 
+        //--------- GET ALL REVIEWS ----------//
+
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Review>))]
         public IActionResult GetReviews()
@@ -32,6 +34,8 @@ namespace WebApplication1.Controllers
 
             return Ok(reviews);
         }
+
+        //--------- GET REVIEW BY ID ----------//
 
         [HttpGet("{reviewId}")]
         [ProducesResponseType(200, Type = typeof(Review))]
@@ -52,6 +56,8 @@ namespace WebApplication1.Controllers
 
             return Ok(review);
         }
+
+        //--------- GET REVIEWS FOR A POKEMON ----------//
 
         [HttpGet("pokemon/{pokeId}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Review>))]
