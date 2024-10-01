@@ -72,5 +72,42 @@ namespace WebApplication1.Controllers
 
             return Ok(pokemons);
         }
+
+        //---------CREATE CATEGORY----------//
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(Category))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public IActionResult CreateCategory([FromBody] CategoryDto categoryToCreate)
+        {
+            if (categoryToCreate == null)
+                return BadRequest(ModelState);
+
+            var category = _categoryRepository.GetCategories()
+                .Where(c => c.Name.Trim().ToUpper() == categoryToCreate.Name.Trim().ToUpper())
+                .FirstOrDefault();
+
+            if(category != null)
+            {
+                ModelState.AddModelError("", $"Category {categoryToCreate.Name} already exists");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var categoryMap = _mapper.Map<Category>(categoryToCreate);
+
+            if(!_categoryRepository.CreateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving {categoryMap.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Succesfully Created");
+        }
+
+
     }
 }

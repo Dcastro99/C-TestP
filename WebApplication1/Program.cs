@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using WebApplication1;
 using WebApplication1.Data;
 using WebApplication1.Interfaces;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
+//builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

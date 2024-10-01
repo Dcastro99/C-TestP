@@ -21,6 +21,46 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.CategoryController",
+    "Method": "CreateCategory",
+    "RelativePath": "api/Category",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryToCreate",
+        "Type": "WebApplication1.Dto.CategoryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WebApplication1.Models.Category",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.CategoryController",
     "Method": "GetCategory",
     "RelativePath": "api/Category/{categoryId}",
     "HttpMethod": "GET",
@@ -111,6 +151,46 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.CountryController",
+    "Method": "CreateCountry",
+    "RelativePath": "api/Country",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "countryCreate",
+        "Type": "WebApplication1.Dto.CountryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WebApplication1.Models.Country",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.CountryController",
     "Method": "GetCountry",
     "RelativePath": "api/Country/{countryId}",
     "HttpMethod": "GET",
@@ -196,6 +276,51 @@
           "text/json"
         ],
         "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.OwnerController",
+    "Method": "CreateCategory",
+    "RelativePath": "api/Owner",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "countryId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ownerCreate",
+        "Type": "WebApplication1.Dto.OwnerDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "WebApplication1.Models.Owner",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
       }
     ]
   },
@@ -450,9 +575,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication1.Controllers.ReviewrController",
+    "ContainingType": "WebApplication1.Controllers.ReviewerController",
     "Method": "GetReviewers",
-    "RelativePath": "api/Reviewr",
+    "RelativePath": "api/Reviewer",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -470,9 +595,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication1.Controllers.ReviewrController",
+    "ContainingType": "WebApplication1.Controllers.ReviewerController",
     "Method": "GetReviewer",
-    "RelativePath": "api/Reviewr/{reviewerId}",
+    "RelativePath": "api/Reviewer/{reviewerId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -505,9 +630,9 @@
     ]
   },
   {
-    "ContainingType": "WebApplication1.Controllers.ReviewrController",
+    "ContainingType": "WebApplication1.Controllers.ReviewerController",
     "Method": "GetReviewsByReviewer",
-    "RelativePath": "api/Reviewr/{reviewerId}/reviews",
+    "RelativePath": "api/Reviewer/{reviewerId}/reviews",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

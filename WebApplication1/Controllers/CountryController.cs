@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Dto;
 using WebApplication1.Interfaces;
 using WebApplication1.Models;
+using WebApplication1.Repository;
 
 namespace WebApplication1.Controllers
 {
@@ -77,5 +78,40 @@ namespace WebApplication1.Controllers
             }
             return Ok(country);
         }
+
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(Country))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public IActionResult CreateCountry([FromBody] CountryDto countryCreate)
+        {
+            if (countryCreate == null)
+                return BadRequest(ModelState);
+
+            var country = _countryRepository.GetCountries()
+                .Where(c => c.Name.Trim().ToUpper() == countryCreate.Name.Trim().ToUpper())
+                .FirstOrDefault();
+
+            if (country != null)
+            {
+                ModelState.AddModelError("", $"Category {countryCreate.Name} already exists");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var countryMap = _mapper.Map<Country>(countryCreate);
+
+            if (!_countryRepository.CreateCountry(countryMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving {countryMap.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Succesfully Created");
+        }
+
     }
 }

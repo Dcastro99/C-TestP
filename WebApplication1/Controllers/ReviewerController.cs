@@ -8,12 +8,12 @@ namespace WebApplication1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewrController: Controller
+    public class ReviewerController: Controller
     {
         private readonly IReviewerRepository _reviewerRepository;
         private readonly IMapper _mapper;
 
-        public ReviewrController(IReviewerRepository reviewerRepository, IMapper mapper)
+        public ReviewerController(IReviewerRepository reviewerRepository, IMapper mapper)
         {
             _reviewerRepository = reviewerRepository;
             _mapper = mapper;

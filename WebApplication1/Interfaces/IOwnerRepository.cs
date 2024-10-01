@@ -9,6 +9,10 @@ namespace WebApplication1.Interfaces
         ICollection<Owner> GetOwnersOfAPokemon(int pokeId);
         ICollection<Pokemon> GetPokemonsByOwner(int ownerId);
         bool OwnerExists(int ownerId);
+
+        bool CreateOwner(Owner owner);
+
+        bool Save();
     }
 
 }
