@@ -6,7 +6,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Repository
 {
- public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
 
     {
         private DataContext _context;
@@ -49,6 +49,12 @@ namespace WebApplication1.Repository
         public bool UpdateCategory(Category category)
         {
             _context.Update(category);
+            return Save();
+        }
+
+        public bool DeleteCategory(Category category)
+        {
+            _context.Remove(category);
             return Save();
         }
     }

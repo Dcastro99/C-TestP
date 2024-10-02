@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
 using WebApplication1.Dto;
 using WebApplication1.Interfaces;
 using WebApplication1.Models;
@@ -143,6 +144,32 @@ namespace WebApplication1.Controllers
             return Ok("Successfully Updated");
         }
 
+        //----------------DELETE COUNTRY----------------//
+
+        [HttpDelete("{countryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult DeleteCategory(int countryId)
+        {
+            if (!_countryRepository.CountryExists(countryId))
+                return NotFound();
+
+            var country = _countryRepository.GetCountry(countryId);
+
+            if (!_countryRepository.DeleteCountry(country))
+            {
+                ModelState.AddModelError("", $"Something went wrong deleting {country.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            return NoContent();
+        }
 
     }
 }

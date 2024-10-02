@@ -137,7 +137,31 @@ namespace WebApplication1.Controllers
             return Ok("Successfully Updated");
         }
 
+        //---------DELETE CATEGORY----------//
 
+        [HttpDelete("{categoryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+       public IActionResult DeleteCategory(int categoryId) {
+            if (!_categoryRepository.CategoryExists(categoryId))
+                return NotFound();
+
+            var category = _categoryRepository.GetCategory(categoryId);
+
+            if (!_categoryRepository.DeleteCategory(category))
+            {
+                ModelState.AddModelError("", $"Something went wrong deleting {category.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            return NoContent();
+        }
 
     }
 }

@@ -14,17 +14,20 @@ namespace WebApplication1.Controllers
         private readonly IPokemonRepository _pokemonRepository;
         private readonly IOwnerRepository _ownerRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IReviewRepository _reviewRepository;
         private readonly IMapper _mapper;
 
         public PokemonController(
             IPokemonRepository pokemonRepository,
             IOwnerRepository ownerRepository,
             ICategoryRepository categoryRepository,
+            IReviewRepository reviewRepository,
             IMapper mapper)
         {
             _pokemonRepository = pokemonRepository;
             _ownerRepository = ownerRepository;
             _categoryRepository = categoryRepository;
+            _reviewRepository = reviewRepository;
             _mapper = mapper;
         }
 
@@ -154,6 +157,41 @@ namespace WebApplication1.Controllers
             }
 
             return Ok("Successfully Updated");
+        }
+
+        //------------------- DELETE POKEMON -----------------//
+
+        [HttpDelete("{pokeId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult DeletePokemon(int pokeId)
+        {
+            if (!_pokemonRepository.PokemonExists(pokeId))
+                return NotFound();
+
+            var reviewsToDelete = _reviewRepository.GetReviewsOfAPokemon(pokeId);
+
+            var pokemon = _pokemonRepository.GetPokemon(pokeId);
+
+            if(!_reviewRepository.DeleteReviews(reviewsToDelete.ToList() ))
+            {
+                ModelState.AddModelError("", $"Something went wrong deleting reviews of {pokemon.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!_pokemonRepository.DeletePokemon(pokemon))
+            {
+                ModelState.AddModelError("", $"Something went wrong deleting {pokemon.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            return NoContent();
         }
 
     }

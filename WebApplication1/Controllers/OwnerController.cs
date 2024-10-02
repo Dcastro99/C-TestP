@@ -146,7 +146,32 @@ namespace WebApplication1.Controllers
             return Ok("Successfully Updated");
         }
 
+        //----------------DELETE OWNER----------------//
 
+        [HttpDelete("{ownerId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult DeleteOwner(int ownerId)
+        {
+            if (!_ownerRepository.OwnerExists(ownerId))
+                return NotFound();
+
+            var owner = _ownerRepository.GetOwner(ownerId);
+
+            if (!_ownerRepository.DeleteOwner(owner))
+            {
+                ModelState.AddModelError("", $"Something went wrong deleting {owner.FirstName}");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            return NoContent();
+        }
 
     }
 }

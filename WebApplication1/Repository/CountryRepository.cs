@@ -26,6 +26,12 @@ namespace WebApplication1.Repository
             return Save();
         }
 
+        public bool DeleteCountry(Country country)
+        {
+            _context.Remove(country);
+            return Save();
+        }
+
         public Country GetCounrtyByOwner(int ownerId)
         {
             return _context.Owners.Where(o => o.Id == ownerId).Select(o => o.Country).FirstOrDefault();

@@ -140,5 +140,31 @@ namespace WebApplication1.Controllers
 
             return Ok("Successfully Updated");
         }
+
+        [HttpDelete("{ReviewerId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult DeleteReviewer(int ReviewerId)
+        {
+            if (!_reviewerRepository.ReviewerExists(ReviewerId))
+                return NotFound();
+
+            var reviewer = _reviewerRepository.GetReviewer(ReviewerId);
+
+            if (!_reviewerRepository.DeleteReviewer(reviewer))
+            {
+                ModelState.AddModelError("", $"Something went wrong deleting {reviewer.FirstName}");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            return NoContent();
+        }
+
     }
 }
