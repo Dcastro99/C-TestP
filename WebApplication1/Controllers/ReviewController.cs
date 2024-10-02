@@ -121,5 +121,32 @@ namespace WebApplication1.Controllers
 
             return Ok("Succesfully Created");
         }
+
+        [HttpPut("{reviewId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdateReview(int reviewId, [FromBody] ReviewDto reviewToUpdate)
+        {
+            if (reviewToUpdate == null || reviewId != reviewToUpdate.Id)
+                return BadRequest(ModelState);
+
+            if (!_reviewRepository.ReviewExists(reviewId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewMap = _mapper.Map<Review>(reviewToUpdate);
+
+            if (!_reviewRepository.UpdateReview(reviewMap))
+            {
+                ModelState.AddModelError("","Something went wrong updating");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Updated");
+        }
     }
 }

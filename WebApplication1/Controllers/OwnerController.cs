@@ -79,6 +79,7 @@ namespace WebApplication1.Controllers
             return Ok(owner);
         }
 
+        //----------------CREATE OWNER----------------//
 
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Owner))]
@@ -102,7 +103,6 @@ namespace WebApplication1.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            Console.WriteLine($"countryId>>>>>>>>>>>>>>>>>: {countryId}");
 
             var ownerMap = _mapper.Map<Owner>(ownerCreate);
 
@@ -115,6 +115,35 @@ namespace WebApplication1.Controllers
             }
 
             return Ok("Succesfully Created");
+        }
+
+        //----------------UPDATE OWNER----------------//
+
+        [HttpPut("{ownerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdateOwner(int ownerId, [FromBody] OwnerDto ownerToUpdate)
+        {
+            if (ownerToUpdate == null || ownerId != ownerToUpdate.Id)
+                return BadRequest(ModelState);
+
+            if (!_ownerRepository.OwnerExists(ownerId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var ownerMap = _mapper.Map<Owner>(ownerToUpdate);
+
+            if (!_ownerRepository.UpdateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong updating {ownerMap.LastName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Updated");
         }
 
 

@@ -113,5 +113,32 @@ namespace WebApplication1.Controllers
 
             return Ok("Succesfully Created");
         }
+
+        [HttpPut("{reviewerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdateReviewer(int reviewerId, [FromBody] ReviewerDto reviewerToUpdate)
+        {
+            if (reviewerToUpdate == null || reviewerId != reviewerToUpdate.Id)
+                return BadRequest(ModelState);
+
+            if (!_reviewerRepository.ReviewerExists(reviewerId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewerMap = _mapper.Map<Reviewer>(reviewerToUpdate);
+
+            if (!_reviewerRepository.UpdateReviewer(reviewerMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong updating {reviewerMap.LastName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Updated");
+        }
     }
 }

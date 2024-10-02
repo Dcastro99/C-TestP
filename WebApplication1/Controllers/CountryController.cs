@@ -79,6 +79,7 @@ namespace WebApplication1.Controllers
             return Ok(country);
         }
 
+        //----------------CREATE COUNTRY----------------//
 
         [HttpPost]
         [ProducesResponseType(201)]
@@ -112,6 +113,36 @@ namespace WebApplication1.Controllers
 
             return Ok("Succesfully Created");
         }
+
+        //----------------UPDATE COUNTRY----------------//
+
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdateCountry(int countryId, [FromBody] CountryDto countryToUpdate)
+        {
+            if (countryToUpdate == null || countryId != countryToUpdate.Id)
+                return BadRequest(ModelState);
+
+            if (!_countryRepository.CountryExists(countryId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var countryMap = _mapper.Map<Country>(countryToUpdate);
+
+            if (!_countryRepository.UpdateCountry(countryMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong updating {countryMap.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Updated");
+        }
+
 
     }
 }

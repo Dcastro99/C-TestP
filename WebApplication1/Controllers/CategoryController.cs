@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
             return Ok(category);
         }
 
-        //---------GET POKEMON BY CATEGORY----------//
+        //----------GET POKEMON BY CATEGORY----------//
 
         [HttpGet("pokemon/{categoryId}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemon>))]
@@ -107,6 +107,36 @@ namespace WebApplication1.Controllers
 
             return Ok("Succesfully Created");
         }
+
+        //---------UPDATE CATEGORY----------//
+
+        [HttpPut("{categoryId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdateCategory(int categoryId, [FromBody] CategoryDto categoryToUpdate)
+        {
+            if (categoryToUpdate == null || categoryId != categoryToUpdate.Id)
+                return BadRequest(ModelState);
+
+            if (!_categoryRepository.CategoryExists(categoryId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var categoryMap = _mapper.Map<Category>(categoryToUpdate);
+
+            if (!_categoryRepository.UpdateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong updating {categoryMap.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Updated");
+        }
+
 
 
     }

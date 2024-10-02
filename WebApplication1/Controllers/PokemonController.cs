@@ -12,11 +12,19 @@ namespace WebApplication1.Controllers
     public class PokemonController : Controller
     {
         private readonly IPokemonRepository _pokemonRepository;
+        private readonly IOwnerRepository _ownerRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
 
-        public PokemonController(IPokemonRepository pokemonRepository , IMapper mapper)
+        public PokemonController(
+            IPokemonRepository pokemonRepository,
+            IOwnerRepository ownerRepository,
+            ICategoryRepository categoryRepository,
+            IMapper mapper)
         {
             _pokemonRepository = pokemonRepository;
+            _ownerRepository = ownerRepository;
+            _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
 
@@ -68,6 +76,8 @@ namespace WebApplication1.Controllers
             return Ok(rating);
         }
 
+        //------------------- CREATE POKEMON -----------------//
+
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -102,5 +112,49 @@ namespace WebApplication1.Controllers
 
             return Ok("Succesfully Created");
         }
-    } 
+
+        //------------------- UPDATE POKEMON -----------------//
+
+        [HttpPut("{pokeId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdatePokemonr(
+            int pokeId,
+            [FromQuery] int ownerId,
+            [FromQuery] int catId,
+            [FromBody] PokemonDto pokemonToUpdate
+            )
+        {
+            if (pokemonToUpdate == null || pokeId != pokemonToUpdate.Id)
+                return BadRequest(ModelState);
+
+            if (!_pokemonRepository.PokemonExists(pokeId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var pokemonMap = _mapper.Map<Pokemon>(pokemonToUpdate);
+
+            //pokemonMap.PokemonOwners = _ownerRepository.GetOwners()
+            //    .Where(o => o.Id == ownerId)
+            //    .Select(o => new PokemonOwner
+            //    {
+            //        Owner = o,
+            //        Pokemon = pokemonMap
+            //    }).ToList();
+         
+
+            if (!_pokemonRepository.UpdatePokemon(ownerId,catId,pokemonMap))
+            {
+                ModelState.AddModelError("", $"Something went wrong updating {pokemonMap.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully Updated");
+        }
+
+    }
 }
