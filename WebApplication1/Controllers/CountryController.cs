@@ -81,7 +81,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpPost]
-        [ProducesResponseType(201, Type = typeof(Country))]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateCountry([FromBody] CountryDto countryCreate)
